@@ -101,6 +101,12 @@ See also `too-long-lines-threshold', `too-long-lines-show-number-of-characters',
                     (if already-hidden
                         (delete-overlay ov)
                       (setq already-hidden ov))))
+             
+                  (define-key too-long-keymap too-long-lines-toggle-key
+                    (lambda () (interactive)
+                      (overlay-put ov 'too-long-line (if (eq (overlay-get ov 'too-long-line) 'shown) t 'shown))
+                      (funcall too-long-lines-overlay-display ov)))
+              
               (if already-hidden
                   (move-overlay already-hidden (+ line-beg too-long-lines-show-number-of-characters) line-end)
                 (lexical-let (
@@ -110,10 +116,6 @@ See also `too-long-lines-threshold', `too-long-lines-show-number-of-characters',
                       (too-long-lines-overlay-display too-long-lines-overlay-display)
                       )
                   (setq already-hidden ov)
-                  (define-key too-long-keymap too-long-lines-toggle-key
-                    (lambda () (interactive)
-                      (overlay-put ov 'too-long-line (if (eq (overlay-get ov 'too-long-line) 'shown) t 'shown))
-                      (funcall too-long-lines-overlay-display ov)))
                   (overlay-put ov 'keymap too-long-keymap)
                   (overlay-put ov 'ovaporate t)
                   (overlay-put ov 'too-long-line cur-too-long-line)))
